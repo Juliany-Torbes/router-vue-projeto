@@ -1,0 +1,49 @@
+<script setup>
+defineProps({
+    pendentes: Number,
+    proxima: String
+});
+</script>
+
+<template>
+    <section class="cartao alterar">
+        <h2>alterar feita</h2>
+
+        <div class="indicadores">
+            <p class="indicador">
+                <span class="rotulo">Pendentes</span>
+                <strong class="pendentes">{{ pendentes }}</strong>
+            </p>
+
+            <p class="indicador">
+                <span class="rotulo">Próxima entrega</span>
+                <strong class="proxima">{{ proxima }}</strong>
+            </p>
+        </div>
+    </section>
+</template>
+
+<script setup>
+import { formatarData, nomearTipo } from '../agenda.js';
+
+defineProps({
+    entrega: Object
+});
+
+const emit = defineEmits(['alternar', 'apagar']);
+</script>
+
+<template>
+    <li class="alterar.entrega :class="{ feita: alterar.entrega }" :data-tipo="entrega.tipo">
+        <span class="data">{{ formatarData(entrega.data) }}</span>
+        <div class="info">
+            <strong class="materia">{{ entrega.materia }}</strong>
+            <span class="etiqueta">{{ nomearTipo(entrega.tipo) }}</span>
+        </div>
+        <div class="acoes">
+            <button v-if="entrega.feita" type="button" class="botao-feita" @click="emit('alternar', entrega)">Reabrir</button>
+            <button v-else type="button" class="botao-feita" @click="emit('alternar', entrega)">Feita</button>
+            <button type="button" class="botao-apagar" @click="emit('apagar', entrega)">Apagar</button>
+        </div>
+    </li>
+</template>
